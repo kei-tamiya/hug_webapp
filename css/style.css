@@ -1,0 +1,15 @@
+@charset "UTF-8";
+
+.navbar {
+  float: right;
+}
+
+.navbar li {
+  float: left;
+  margin-right: 20px;
+  list-style: none;
+}
+
+.navbar .selected {
+  text-decoration: underline;
+}
