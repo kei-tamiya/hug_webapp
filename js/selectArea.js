@@ -54,7 +54,7 @@ $(function() {
   var turnNum = 80;
   var cellHtml = '<tr>';
   for (var i=1; i <= 6400; i++) {
-    cellHtml += "<td><img src='pixel/0.gif' width=15 height=15 id='cell" + i + "' class='cell'></td>"
+    cellHtml += "<td class='cellTd'><img src='pixel/0.gif' width=15 height=15 id='cell" + i + "' class='cell'></td>"
     if (i % turnNum == 0) {
       cellHtml += "</tr>"
       if (i != 6400) {
@@ -66,6 +66,19 @@ $(function() {
 });
 
 $(function() {
+  $('.color2').draggable({
+    stop : function (event , ui){
+      var x = ui.offset.left;
+      var y = ui.offset.top;
+      // document.elementFromPointがz-indexで一番上の要素を取得するので一旦cellを一番上に
+      $('.cellTd').css("zIndex", 900);
+      var elm = document.elementFromPoint(x, y - document.body.scrollTop);
+      $('.cellTd').css("zIndex", 0);
+    },
+    containment: "#livingSpaceTable",
+    snap: ".cell"
+  });
+
   var ns = {};
   var turnNum = 80;
   var livingSpaceAgentNumArr = [];
@@ -81,6 +94,8 @@ $(function() {
 
 
   $('.cell').on('click', function() {
+    console.log($(this).offset().left);
+    console.log($(this).offset().top);
     var $living_space_yoko_length = $('#living_space_yoko_length');
     var $living_space_tate_length = $('#living_space_tate_length');
     // var $next_toilet_spot = $('#next_toilet_spot');

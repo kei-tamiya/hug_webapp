@@ -8,6 +8,10 @@
   position: relative;
 }
 
+.livingSpaceTable td img {
+  display: block;
+}
+
 .livingSpaceAgentNum {
   position: absolute;
   left: -5px;
@@ -15,4 +19,19 @@
   font-size: 110%;
   font-weight: bold;
   color: #fff;
+}
+
+.cell {
+  z-index: 50;
+  opacity: 0.8;
+}
+
+.color2 {
+  width: 60px;
+  height: 75px;
+  /*z-index: 1000;*/
+  background: #3C9F60;
+  color: #fff;
+  text-align: center;
+  line-height: 75px;
 }
