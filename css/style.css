@@ -1,5 +1,11 @@
 @charset "UTF-8";
 
+/*ターンの文字調整*/
+#turnText{
+  text-align: left;
+  font-size: 20px;
+}
+
 .navbar {
   float: right;
 }
