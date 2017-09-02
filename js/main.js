@@ -15,7 +15,7 @@ $(function(){
   var messages = [];
   var NAMESPACE = {};
   NAMESPACE.lastDrinkWaterDistributionAmount = 0;
-  NAMESPACE.ToiletDistributionAmount = 0;
+  NAMESPACE.ExcretaDistributionAmount = 0;
   NAMESPACE.nextTurnMessages = [];
   NAMESPACE.totalDrinkWaterAmountList = [];
   NAMESPACE.dissatisfactionAverage = [0];
@@ -26,9 +26,9 @@ $(function(){
     var $women_agent_num = $('#women_agent_num');
     var $men_agent_num = $('#men_agent_num');
     var $women_toilet_num = $('#women_toilet_num');
-    var $women_toilet_durability = $('#women_toilet_durability');
     var $men_toilet_num = $('#men_toilet_num');
-    var $men_toilet_durability = $('#men_toilet_durability');
+    var $temporary_toilet_num = $('#temporary_toilet_num');
+    var $excreta_amount = $('#excreta_amount');
     var $toilet_goods_num = $('#toilet_goods_num');
     var $toilet_water_amount = $('#toilet_water_amount');
     var $drink_water_amount = $('#drink_water_amount');
@@ -39,9 +39,9 @@ $(function(){
     var women_agent_num = parseInt($women_agent_num.val());
     var men_agent_num = parseInt($men_agent_num.val());
     var women_toilet_num = parseInt($women_toilet_num.val());
-    var women_toilet_durability = parseInt($women_toilet_durability.val());
     var men_toilet_num = parseInt($men_toilet_num.val());
-    var men_toilet_durability = parseInt($men_toilet_durability.val());
+    var temporary_toilet_num = parseInt($temporary_toilet_num.val());
+    var excreta_amount = parseInt($excreta_amount.val());
     var toilet_goods_num = parseInt($toilet_goods_num.val());
     var toilet_water_amount = parseInt($toilet_water_amount.val());
     var drink_water_amount = parseInt($drink_water_amount.val());
@@ -55,7 +55,7 @@ $(function(){
     //   return alert('女性避難者数は数字を入れてください');
     // }
     // if (currentTurn === 0) {
-    //   if (!women_agent_num || !men_agent_num || !women_toilet_num || !women_toilet_durability || !men_toilet_num || !men_toilet_durability || !toilet_goods_num || !toilet_water_amount || !drink_water_amount || !total_drink_water_amount) {
+    //   if (!women_agent_num || !men_agent_num || !women_toilet_num || !men_toilet_num || !temporary_toilet_num || !excreta_amount || !toilet_goods_num || !toilet_water_amount || !drink_water_amount || !total_drink_water_amount) {
     //     return alert('必要な項目に適切な型で値を入力してください');
     //   }
     //   NAMESPACE.totalDrinkWaterAmountList.push(parseInt($('#total_drink_water_amount').val()));
@@ -161,14 +161,14 @@ $(function(){
 
       //ターン毎処理へ移動
       // if (currentTurn === 2 || currentTurn === 5) {
-      //   if (NAMESPACE.lastDrinkWaterDistributionAmount != 0 && NAMESPACE.lastDrinkWaterDistributionAmount < 3) {
+      //   if (NAMESPACE.lastDrinkWaterDistributionAmount < 3) {
       //     messages.push('生活用水の量が少ないと苦情が来ています。');
       //   }
       // }
 
       //重複プログラムの削除
       // if (currentTurn === 2 || currentTurn === 5) {
-      //   if (NAMESPACE.lastDrinkWaterDistributionAmount != 0 && NAMESPACE.lastDrinkWaterDistributionAmount < 3) {
+      //   if (NAMESPACE.lastDrinkWaterDistributionAmount < 3) {
       //     messages.push('生活用水の量が少ないと苦情が来ています。');
       //   }
       // }
