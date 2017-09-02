@@ -54,7 +54,7 @@ $(function() {
   var turnNum = 80;
   var cellHtml = '<tr>';
   for (var i=1; i <= 6400; i++) {
-    cellHtml += "<td><img src='pixel/0.gif' width=15 height=15 id='cell" + i + "' class='cell'></td>"
+    cellHtml += "<td class='cellTd'><img src='pixel/0.gif' width='15' height='15' id='cell" + i + "' class='cell'></td>"
     if (i % turnNum == 0) {
       cellHtml += "</tr>"
       if (i != 6400) {
@@ -115,27 +115,66 @@ $(function() {
       return false;
     }
 
-    for (var i=idNum; i < idNum+yoko; i++) {
-      for (var j=0; j < tate; j++) {
-        var checkIdNum = i + j*turnNum;
-        var checkId = '#cell' + checkIdNum;
-        if ($(checkId).hasClass('occupied')) {
-          // TODO あとで番号を表示するように変更
-          window.alert('他の占有エリアと重なっているため占有できません。先に他の占有空間を移動させてください。');
-          $('.preOccupied').removeClass('preOccupied');
-          return false;
+    if (!canOccupy(idNum, livingSpaceAgentNum)) {
+      return;
+    };
+
+    var html = '<div id="livingSpace' + livingSpaceAgentNum + '" class="livingSpace">' + livingSpaceAgentNum + '</div>';
+    $('#livingSpaces').append(html);
+    $('#livingSpace' + livingSpaceAgentNum).offset({ top: $(this).offset().top, left: $(this).offset().left });
+    var startX = 0;
+    var startY = 0;
+    $('.livingSpace').draggable({
+      start: function (event, ui) {
+        startX = ui.offset.left;
+        startY = ui.offset.top;
+      },
+      stop : function (event , ui){
+        var x = ui.offset.left;
+        var y = ui.offset.top;
+        // document.elementFromPointがz-indexで一番上の要素を取得するので一旦cellを一番上に
+        $('.cellTd').css("zIndex", 900);
+        var leftTopCellOnStop = document.elementFromPoint(x, y - document.body.scrollTop);
+        $('.cellTd').css("zIndex", 0);
+        var leftTopCellId = parseInt($(leftTopCellOnStop).attr('id').replace('cell', ''));
+        if (!canOccupy(leftTopCellId, livingSpaceAgentNum)) {
+          $(this).offset({ top: startY, left: startX });
+        };
+      },
+      containment: "#livingSpaceTable",
+      snap: ".cell"
+    });
+    $('#livingSpace' + livingSpaceAgentNum).on('contextmenu', function () {
+      if (window.confirm(livingSpaceAgentNum + '番を消去しますか？')) {
+        $(this).remove();
+        var idx = $.inArray(parseInt(livingSpaceAgentNum, 10), livingSpaceAgentNumArr);
+        if(idx >= 0){
+          livingSpaceAgentNumArr.splice(idx, 1);
         }
-        // 占有空間に避難者番号をふるために一旦クラス付与
-        if (i == idNum+2 && j == 0) {
-          // TODO idの方がいいかも
-          $(checkId).addClass('livingSpaceAgentNumCell');
-        }
-        $(checkId).addClass('preOccupied');
+        $('.agent' + livingSpaceAgentNum).removeClass('occupied').removeClass('agent' + livingSpaceAgentNum);
       }
-    }
-    $('.livingSpaceAgentNumCell').after("<p class='livingSpaceAgentNum'>" + livingSpaceAgentNum + "</p>").removeClass('livingSpaceAgentNumCell');
+      return false;
+    });
+    // 同じ番号の占有空間を作らせないために一度生成した占有空間番号を配列に格納
     livingSpaceAgentNumArr.push(livingSpaceAgentNum);
-    $('.preOccupied').attr('src', "pixel/3.gif").addClass('occupied').addClass('agent' + livingSpaceAgentNum).removeClass('preOccupied');
+
+    function canOccupy(idNum, livingSpaceAgentNum) {
+      for (var i=idNum; i < idNum+yoko; i++) {
+        for (var j=0; j < tate; j++) {
+          var checkIdNum = i + j*turnNum;
+          var checkId = '#cell' + checkIdNum;
+          if ($(checkId).hasClass('occupied')) {
+            // TODO あとで番号を表示するように変更
+            window.alert('他の占有エリアと重なっているため占有できません。先に他の占有空間を移動させてください。');
+            $('.preOccupied').removeClass('preOccupied');
+            return false;
+          }
+          $(checkId).addClass('preOccupied');
+        }
+      }
+      $('.preOccupied').removeClass('preOccupied').addClass('agent' + livingSpaceAgentNum).addClass('occupied');
+      return true;
+    }
   });
 
   function isParseInt(str) {
@@ -147,9 +186,9 @@ $(function() {
   }
 
   $('#consoleOutput').on('click', function() {
-    var NAMESPACE = {};
-    NAMESPACE.agentNumArr = livingSpaceAgentNumArr;
-    NAMESPACE.livingSpaces = {};
+    var outputObj = {};
+    outputObj.agentNumArr = livingSpaceAgentNumArr;
+    outputObj.livingSpaces = {};
     for (var i=0; i < livingSpaceAgentNumArr.length; i++) {
       var agentNum = livingSpaceAgentNumArr[i];
       var agent = 'agent' + agentNum;
@@ -158,11 +197,11 @@ $(function() {
       $.each(cells, function() {
         livingSpaceArr.push($(this).attr('id'));
       });
-      NAMESPACE.livingSpaces['agent' + agentNum] = livingSpaceArr;
+      outputObj.livingSpaces['agent' + agentNum] = livingSpaceArr;
       // var cell = $('.' + agentNum).;
       // console.log(cell);
     }
-    console.log(JSON.stringify(NAMESPACE));
+    console.log(JSON.stringify(outputObj));
   });
 
   $('#consoleInput').on('click', function() {
@@ -197,5 +236,4 @@ $(function() {
   function paintLivingSpace(cell, agent) {
     $('#' + cell).attr('src', "pixel/3.gif").addClass('occupied').addClass(agent);
   }
-
 });
