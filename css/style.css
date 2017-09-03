@@ -6,6 +6,10 @@
   font-size: 20px;
 }
 
+.graph_header{
+  margin-bottom: 30px;
+}
+
 .navbar {
   float: right;
 }

@@ -50,6 +50,22 @@ $(function(){
 
     var currentTurn = parseInt($('#currentTurn').text());
 
+    var total_women_agent_num = [6,23,37,56,74,88,106];
+      // var turn0_women_agent_num = total_women_agent_num[0];
+      // var turn1_women_agent_num = total_women_agent_num[1];
+      // var turn2_women_agent_num = total_women_agent_num[2];
+      // var turn3_women_agent_num = total_women_agent_num[3];
+      // var turn4_women_agent_num = total_women_agent_num[4];
+      // var turn5_women_agent_num = total_women_agent_num[5];
+      // var turn6_women_agent_num = total_women_agent_num[6];
+    var total_men_agent_num = [8,20,36,55,70,86,98];
+      // var turn0_men_agent_num = total_men_agent_num[0];
+      // var turn1_men_agent_num = total_men_agent_num[1];
+      // var turn2_men_agent_num = total_men_agent_num[2];
+      // var turn3_men_agent_num = total_men_agent_num[3];
+      // var turn4_men_agent_num = total_men_agent_num[4];
+      // var turn5_men_agent_num = total_men_agent_num[5];
+      // var turn6_men_agent_num = total_men_agent_num[6];
 
     // if (typeof women_agent_num !== 'number') {
     //   return alert('女性避難者数は数字を入れてください');
@@ -61,10 +77,10 @@ $(function(){
     //   NAMESPACE.totalDrinkWaterAmountList.push(parseInt($('#total_drink_water_amount').val()));
     // }
 
-    if (currentTurn === 6) {
+    if (currentTurn === 7) {
       $('#turnText').text('ゲーム終了');
       $('#submitBtn').prop('disabled', 'true');
-    } else if (currentTurn < 6) {
+    } else if (currentTurn < 7) {
       messages = NAMESPACE.nextTurnMessages.slice();
       NAMESPACE.nextTurnMessages = [];
       // var agentNum = women_agent_num + men_agent_num;
@@ -123,25 +139,32 @@ $(function(){
       if (currentTurn === 0) {
         messages.push('１日目前半<br>「もうダメです。トイレを使わせてください。お願いします！」と避難者が押し寄せて来ました。');
         _calcDrinkWater();
-        _calcToilet();
+        var turn0_drink_water = total_drink_water_amount;
+        console.log(turn0_drink_water);
       }
       //ターン毎の固定コメント
       if (currentTurn === 1) {
+        $temporary_toilet_num = $('#temporary_toilet_num').val('5');
         messages.push('１日目後半<br>仮設トイレ５基が到着しました。どこに設置しますか？');
         _calcDrinkWater();
-        _calcToilet();
+        var turn1_drink_water = total_drink_water_amount;
+        console.log(turn1_drink_water);
       }
       //ターン毎の固定コメント
       if (currentTurn === 2) {
         messages.push('２日目前半<br>ニーズ調査にきました。現状の避難所のニーズについて教えてください。<br>仮設シャワー１基が到着しました。<br>ポータブルトイレ２０個が到着しました。');
         _calcDrinkWater();
         _calcToilet();
+        var turn2_drink_water = total_drink_water_amount;
+        console.log(turn2_drink_water);
       }
       //ターン毎の固定コメント
       if (currentTurn === 3) {
         messages.push('２日目後半<br>炊き出し用の食器が到着しました。');
         _calcDrinkWater();
         _calcToilet();
+        var turn3_drink_water = total_drink_water_amount;
+        console.log(turn3_drink_water);
       }
       //ターン毎の固定コメント
       if (currentTurn === 4) {
@@ -150,15 +173,26 @@ $(function(){
         //200人*3L*3日 = 1800Lが目安か
         _calcDrinkWater();
         _calcToilet();
-        var supplyWaterAmount = 1800;
+        var supplyWaterAmount = 1500;
         var remainingDrinkWaterAmount = Math.floor(total_drink_water_amount + supplyWaterAmount);
         $('#total_drink_water_amount').val(remainingDrinkWaterAmount);
+        var turn4_drink_water = total_drink_water_amount;
+        console.log(turn4_drink_water);
       }
       //ターン毎の固定コメント
       if (currentTurn === 5) {
         messages.push('３日目後半<br>トイレットペーパー５０個が到着しました。');
         _calcDrinkWater();
         _calcToilet();
+        var turn5_drink_water = total_drink_water_amount;
+        console.log(turn5_drink_water);
+      }
+      if (currentTurn === 6) {
+        messages.push('ゲームが終了しました。');
+        _calcDrinkWater();
+        _calcToilet();
+        var turn6_drink_water = total_drink_water_amount;
+        console.log(turn6_drink_water);
       }
       // // 全ターン計算実施
       // if (currentTurn === 1 || currentTurn === 2 || currentTurn === 3 || currentTurn === 4 || currentTurn === 5|| currentTurn === 6 ) {
@@ -250,18 +284,143 @@ $(function(){
 
       NAMESPACE.totalDrinkWaterAmountList.push(parseInt($('#total_drink_water_amount').val()));
       NAMESPACE.dissatisfactionAverage.push(3);
+      var ctx = document.getElementById('chart_total_drink_water_amount').getContext('2d');
+      var chart_total_drink_water_amount = new Chart(ctx, {
+      type: 'line',
+      data: {
+      labels: ['ターン0','ターン1', 'ターン2', 'ターン3', 'ターン4', 'ターン5', 'ターン6'],
+      datasets: [{
+        label: '水量',
+        data: [turn0_drink_water, turn1_drink_water, turn2_drink_water, turn3_drink_water, turn4_drink_water, turn5_drink_water, turn6_drink_water],
+        backgroundColor: "rgba(153,255,51,0.2)"
+      }]
+      },
+      options: {
+              scale: {
+                  ticks: {
+                    suggestedMin: 50,
+                    suggestedMax: 100,
+                  }
+              }
+          }
+      });
     }
   });
 
+$('#inputNumBtn').on('click', function(e) {
+  e.preventDefault();
+
+  var $women_agent_num = $('#women_agent_num');
+  var $men_agent_num = $('#men_agent_num');
+  var $women_toilet_num = $('#women_toilet_num');
+  var $men_toilet_num = $('#men_toilet_num');
+  var $temporary_toilet_num = $('#temporary_toilet_num');
+  var $excreta_amount = $('#excreta_amount');
+  var $toilet_goods_num = $('#toilet_goods_num');
+  var $toilet_water_amount = $('#toilet_water_amount');
+  var $drink_water_amount = $('#drink_water_amount');
+  var $total_drink_water_amount = $('#total_drink_water_amount');
+  // var $next_toilet_spot = $('#next_toilet_spot');
+
+  // persInt 数値化
+  var women_agent_num = parseInt($women_agent_num.val());
+  var men_agent_num = parseInt($men_agent_num.val());
+  var women_toilet_num = parseInt($women_toilet_num.val());
+  var men_toilet_num = parseInt($men_toilet_num.val());
+  var temporary_toilet_num = parseInt($temporary_toilet_num.val());
+  var excreta_amount = parseInt($excreta_amount.val());
+  var toilet_goods_num = parseInt($toilet_goods_num.val());
+  var toilet_water_amount = parseInt($toilet_water_amount.val());
+  var drink_water_amount = parseInt($drink_water_amount.val());
+  var total_drink_water_amount = parseInt($total_drink_water_amount.val());
+  // var next_toilet_spot = $next_toilet_spot.val();
+
+  var currentTurn = parseInt($('#currentTurn').text());
+
+  var total_women_agent_num = [6,23,37,56,74,88,106];
+    // var turn0_women_agent_num = total_women_agent_num[0];
+    // var turn1_women_agent_num = total_women_agent_num[1];
+    // var turn2_women_agent_num = total_women_agent_num[2];
+    // var turn3_women_agent_num = total_women_agent_num[3];
+    // var turn4_women_agent_num = total_women_agent_num[4];
+    // var turn5_women_agent_num = total_women_agent_num[5];
+    // var turn6_women_agent_num = total_women_agent_num[6];
+  var total_men_agent_num = [8,20,36,55,70,86,98];
+    // var turn0_men_agent_num = total_men_agent_num[0];
+    // var turn1_men_agent_num = total_men_agent_num[1];
+    // var turn2_men_agent_num = total_men_agent_num[2];
+    // var turn3_men_agent_num = total_men_agent_num[3];
+    // var turn4_men_agent_num = total_men_agent_num[4];
+    // var turn5_men_agent_num = total_men_agent_num[5];
+    // var turn6_men_agent_num = total_men_agent_num[6];
+  if (currentTurn === 0) {
+    $women_agent_num = $('#women_agent_num').val(total_women_agent_num[0]);
+    $men_agent_num = $('#men_agent_num').val(total_men_agent_num[0]);
+    $women_toilet_num = $('#women_toilet_num').val('0');
+    $men_toilet_num = $('#men_toilet_num').val('0');
+    $temporary_toilet_num = $('#temporary_toilet_num').val('0');
+    $excreta_amount = $('#excreta_amount').val('0');
+    $toilet_goods_num = $('#toilet_goods_num').val('30');
+    $toilet_water_amount = $('#toilet_water_amount').val('30');
+    $drink_water_amount = $('#drink_water_amount').val('3');
+    $total_drink_water_amount = $('#total_drink_water_amount').val('600');
+    var turn0_drink_water = 0;
+    var turn1_drink_water = 0;
+    var turn2_drink_water = 0;
+    var turn3_drink_water = 0;
+    var turn4_drink_water = 0;
+    var turn5_drink_water = 0;
+    var turn6_drink_water = 0;
+  }
+  if (currentTurn === 1) {
+    $women_agent_num = $('#women_agent_num').val(total_women_agent_num[1]);
+    $men_agent_num = $('#men_agent_num').val(total_men_agent_num[1]);
+  }
+  if (currentTurn === 2) {
+    $women_agent_num = $('#women_agent_num').val(total_women_agent_num[2]);
+    $men_agent_num = $('#men_agent_num').val(total_men_agent_num[2]);
+  }
+  if (currentTurn === 3) {
+    $women_agent_num = $('#women_agent_num').val(total_women_agent_num[3]);
+    $men_agent_num = $('#men_agent_num').val(total_men_agent_num[3]);
+  }
+  if (currentTurn === 4) {
+    $women_agent_num = $('#women_agent_num').val(total_women_agent_num[4]);
+    $men_agent_num = $('#men_agent_num').val(total_men_agent_num[4]);
+  }
+  if (currentTurn === 5) {
+    $women_agent_num = $('#women_agent_num').val(total_women_agent_num[5]);
+    $men_agent_num = $('#men_agent_num').val(total_men_agent_num[5]);
+  }
+  if (currentTurn === 6) {
+    $women_agent_num = $('#women_agent_num').val(total_women_agent_num[6]);
+    $men_agent_num = $('#men_agent_num').val(total_men_agent_num[6]);
+  }
+});
+
+
+
+var ctx = document.getElementById('chart_total_people_amount').getContext('2d');
+var chart_total_people_amount = new Chart(ctx, {
+type: 'line',
+data: {
+labels: ['ターン0','ターン1', 'ターン2', 'ターン3', 'ターン4', 'ターン5', 'ターン6'],
+datasets: [{
+  label: '人数',
+  data: [14, 43, 73, 111, 144, 174, 204],
+  backgroundColor: "rgba(255,153,0,0.2)"
+}]
+}
+});
 
   // 開発用
   $('#inputDevNumBtn').on('click', function () {
     $women_agent_num = $('#women_agent_num').val('50');
     $men_agent_num = $('#men_agent_num').val('50');
-    $women_toilet_num = $('#women_toilet_num').val('5');
-    $men_toilet_num = $('#men_toilet_num').val('5');
-    $temporary_toilet_num = $('#temporary_toilet_num').val('5');
-    $excreta_amount = $('#excreta_amount').val('777');
+    $women_toilet_num = $('#women_toilet_num').val('0');
+    $men_toilet_num = $('#men_toilet_num').val('0');
+    $temporary_toilet_num = $('#temporary_toilet_num').val('0');
+    $excreta_amount = $('#excreta_amount').val('0');
     $toilet_goods_num = $('#toilet_goods_num').val('30');
     $toilet_water_amount = $('#toilet_water_amount').val('30');
     $drink_water_amount = $('#drink_water_amount').val('3');

@@ -8,6 +8,7 @@
 <link rel="stylesheet" type="text/css" href="css/style_d3.css"/>
 <link rel="stylesheet" type="text/css" href="css/style.css"/>
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <!-- <script type="text/javascript" src="js/d3.min.js"></script> -->
 </head>
@@ -84,6 +85,9 @@
         <input type="submit" value="Submit" class='btn btn-primary' id='submitBtn' />
       </div>
       <div class='form form-group' style="margin-top: 40px; text-align: right;">
+        <input type="submit" value="数値入力" class='btn btn-primary' id='inputNumBtn' />
+      </div>
+      <div class='form form-group' style="margin-top: 40px; text-align: right;">
         <button type="button" value="" class='btn btn-primary' id='inputDevNumBtn'>
           とりあえず
         </button>
@@ -96,11 +100,15 @@
   <div class='row graphs'>
     <div class='col-sm-4'>
       <div id='graph_total_drink_water_amount'>
+        <canvas id="chart_total_drink_water_amount"></canvas>
         <p class='graph_header'>飲み水の備蓄量（L）</p>
-        <svg class="line-graph"></svg>
       </div>
     </div>
     <div class='col-sm-4'>
+      <div id='graph_total_people_amount'>
+        <canvas id="chart_total_people_amount"></canvas>
+        <p class='graph_header'>総避難者人数（人）</p>
+      </div>
     </div>
     <div class='col-sm-4'>
       <div id='graph_dissatisfaction_average'>
