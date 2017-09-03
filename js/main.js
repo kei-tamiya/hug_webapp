@@ -1,17 +1,17 @@
 // var d3 = require("d3");
 $(function(){
   //ランダムイベントの削除
-  var tmpMessages = [
-    'が体調不良を訴えています。',
-    '体調不良者が増加傾向です。',
-    '水を追加で欲しがっている人が20人います。',
-    '水担当の運営「このペースで水を使うとトイレを流すための水がなくなりそうです！」。',
-    '赤ちゃんの泣き声がうるさいと苦情を言っている人がいます。',
-    '占有空間の面積が狭くてつらいと苦情が出ています。',
-    'ペットが迷惑だと苦情が出ています。',
-    '隣の人が普通より多い量のご飯をもってるんだけどどういうこと！？！？',
-    '新たに30人きました。どうしますか。'
-  ];
+  // var tmpMessages = [
+  //   'が体調不良を訴えています。',
+  //   '体調不良者が増加傾向です。',
+  //   '水を追加で欲しがっている人が20人います。',
+  //   '水担当の運営「このペースで水を使うとトイレを流すための水がなくなりそうです！」。',
+  //   '赤ちゃんの泣き声がうるさいと苦情を言っている人がいます。',
+  //   '占有空間の面積が狭くてつらいと苦情が出ています。',
+  //   'ペットが迷惑だと苦情が出ています。',
+  //   '隣の人が普通より多い量のご飯をもってるんだけどどういうこと！？！？',
+  //   '新たに30人きました。どうしますか。'
+  // ];
   var messages = [];
   var NAMESPACE = {};
   NAMESPACE.lastDrinkWaterDistributionAmount = 0;
@@ -67,57 +67,57 @@ $(function(){
     } else if (currentTurn < 6) {
       messages = NAMESPACE.nextTurnMessages.slice();
       NAMESPACE.nextTurnMessages = [];
-      var agentNum = women_agent_num + men_agent_num;
-      if (Math.random() < 0.4) {
-        var idx = Math.floor(Math.random() * tmpMessages.length);
-        if (idx === 0){
-          var names = '';
-          for (var i=0; i < 3; i++) {
-            names += (Math.floor(Math.random() * (10))+1).toString() + '番さん、';
-          }
-          names += tmpMessages[0]
-          messages.push(names);
-        } else {
-          messages.push(tmpMessages[idx]);
-        }
-      }
+      // var agentNum = women_agent_num + men_agent_num;
+      // if (Math.random() < 0.4) {
+      //   var idx = Math.floor(Math.random() * tmpMessages.length);
+      //   if (idx === 0){
+      //     var names = '';
+      //     for (var i=0; i < 3; i++) {
+      //       names += (Math.floor(Math.random() * (10))+1).toString() + '番さん、';
+      //     }
+      //     names += tmpMessages[0]
+      //     messages.push(names);
+      //   } else {
+      //     messages.push(tmpMessages[idx]);
+      //   }
+      // }
 
 //ランダムイベントの消去
-      if (women_toilet_num > 0 && Math.random() < 0.4) {
-        $('#women_toilet_num').val(women_toilet_num-1);
-        if (women_toilet_num-1 === 0) {
-          messages.push('使用可能な女子トイレがなくなりました。');
-        } else {
-          messages.push('女子トイレが1つ使用できなくなりました。');
-        }
-      }
+      // if (women_toilet_num > 0 && Math.random() < 0.4) {
+      //   $('#women_toilet_num').val(women_toilet_num-1);
+      //   if (women_toilet_num-1 === 0) {
+      //     messages.push('使用可能な女子トイレがなくなりました。');
+      //   } else {
+      //     messages.push('女子トイレが1つ使用できなくなりました。');
+      //   }
+      // }
 
-      if (men_toilet_num > 0 && Math.random() < 0.4) {
-        $('#men_toilet_num').val(men_toilet_num-1);
-        if (men_toilet_num-1 === 0) {
-          messages.push('使用可能な男子トイレがなくなりました。');
-        } else {
-          messages.push('男子トイレが1つ使用できなくなりました。');
-        }
-      }
+      // if (men_toilet_num > 0 && Math.random() < 0.4) {
+      //   $('#men_toilet_num').val(men_toilet_num-1);
+      //   if (men_toilet_num-1 === 0) {
+      //     messages.push('使用可能な男子トイレがなくなりました。');
+      //   } else {
+      //     messages.push('男子トイレが1つ使用できなくなりました。');
+      //   }
+      // }
 
-      if (toilet_goods_num > 0) {
-        var goods_num = Math.floor(toilet_goods_num - (women_agent_num+men_agent_num)/8);
-        if (goods_num <= 0) {
-          goods_num = 0;
-          messages.push('残りのトイレットペーパー数が0になりました。');
-        }
-        $('#toilet_goods_num').val(goods_num);
-      }
+      // if (toilet_goods_num > 0) {
+      //   var goods_num = Math.floor(toilet_goods_num - (women_agent_num+men_agent_num)/8);
+      //   if (goods_num <= 0) {
+      //     goods_num = 0;
+      //     messages.push('残りのトイレットペーパー数が0になりました。');
+      //   }
+      //   $('#toilet_goods_num').val(goods_num);
+      // }
 
-      if (toilet_water_amount > 0) {
-        var water_amount = Math.floor(toilet_water_amount - agentNum/20);
-        if (water_amount <= 0) {
-          water_amount = 0;
-          messages.push('残りのトイレを流す水の量が0になりました。');
-        }
-        $('#toilet_water_amount').val(water_amount);
-      }
+      // if (toilet_water_amount > 0) {
+      //   var water_amount = Math.floor(toilet_water_amount - agentNum/20);
+      //   if (water_amount <= 0) {
+      //     water_amount = 0;
+      //     messages.push('残りのトイレを流す水の量が0になりました。');
+      //   }
+      //   $('#toilet_water_amount').val(water_amount);
+      // }
 
       //ターン毎の固定コメント
       if (currentTurn === 0) {
