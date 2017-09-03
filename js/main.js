@@ -19,6 +19,7 @@ $(function(){
   NAMESPACE.nextTurnMessages = [];
   NAMESPACE.totalDrinkWaterAmountList = [];
   NAMESPACE.dissatisfactionAverage = [0];
+  NAMESPACE.drinkWaterList = [];
 
   $('#submitBtn').on('click', function(e) {
     e.preventDefault();
@@ -135,83 +136,63 @@ $(function(){
       //   $('#toilet_water_amount').val(water_amount);
       // }
 
+      function update () {
+        _calcDrinkWater();
+        NAMESPACE.drinkWaterList.push(total_drink_water_amount);
+      }
+
       //ターン毎の固定コメント
       if (currentTurn === 0) {
         messages.push('１日目前半<br>「もうダメです。トイレを使わせてください。お願いします！」と避難者が押し寄せて来ました。');
-        _calcDrinkWater();
-        var turn0_drink_water = total_drink_water_amount;
-        console.log(turn0_drink_water);
+        update();
       }
       //ターン毎の固定コメント
       if (currentTurn === 1) {
         $temporary_toilet_num = $('#temporary_toilet_num').val('5');
         messages.push('１日目後半<br>仮設トイレ５基が到着しました。どこに設置しますか？');
-        _calcDrinkWater();
-        var turn1_drink_water = total_drink_water_amount;
-        console.log(turn1_drink_water);
+        update();
       }
       //ターン毎の固定コメント
       if (currentTurn === 2) {
         messages.push('２日目前半<br>ニーズ調査にきました。現状の避難所のニーズについて教えてください。<br>仮設シャワー１基が到着しました。<br>ポータブルトイレ２０個が到着しました。');
-        _calcDrinkWater();
+        update();
         _calcToilet();
-        var turn2_drink_water = total_drink_water_amount;
-        console.log(turn2_drink_water);
+        if (NAMESPACE.lastDrinkWaterDistributionAmount < 3) {
+          messages.push('生活用水の量が少ないと苦情が来ています。');
+        }
       }
       //ターン毎の固定コメント
       if (currentTurn === 3) {
         messages.push('２日目後半<br>炊き出し用の食器が到着しました。');
-        _calcDrinkWater();
+        update();
         _calcToilet();
-        var turn3_drink_water = total_drink_water_amount;
-        console.log(turn3_drink_water);
       }
       //ターン毎の固定コメント
       if (currentTurn === 4) {
         messages.push('３日目前半<br>給水タンク車２台が到着しました。備蓄生活用水が増加しました。<br>総理大臣のお見舞いが到着しました。');
         //給水タンク容量１車２０００L　何リットルか追加する
         //200人*3L*3日 = 1800Lが目安か
-        _calcDrinkWater();
+        update();
         _calcToilet();
         var supplyWaterAmount = 1500;
         var remainingDrinkWaterAmount = Math.floor(total_drink_water_amount + supplyWaterAmount);
         $('#total_drink_water_amount').val(remainingDrinkWaterAmount);
-        var turn4_drink_water = total_drink_water_amount;
-        console.log(turn4_drink_water);
       }
       //ターン毎の固定コメント
       if (currentTurn === 5) {
         messages.push('３日目後半<br>トイレットペーパー５０個が到着しました。');
-        _calcDrinkWater();
+        update();
         _calcToilet();
-        var turn5_drink_water = total_drink_water_amount;
-        console.log(turn5_drink_water);
+        if (NAMESPACE.lastDrinkWaterDistributionAmount < 3) {
+          messages.push('生活用水の量が少ないと苦情が来ています。');
+        }
       }
       if (currentTurn === 6) {
         messages.push('ゲームが終了しました。');
-        _calcDrinkWater();
+        update();
         _calcToilet();
-        var turn6_drink_water = total_drink_water_amount;
-        console.log(turn6_drink_water);
       }
-      // // 全ターン計算実施
-      // if (currentTurn === 1 || currentTurn === 2 || currentTurn === 3 || currentTurn === 4 || currentTurn === 5|| currentTurn === 6 ) {
-      //   _calcDrinkWater();
-      // }
 
-      //ターン毎処理へ移動
-      // if (currentTurn === 2 || currentTurn === 5) {
-      //   if (NAMESPACE.lastDrinkWaterDistributionAmount < 3) {
-      //     messages.push('生活用水の量が少ないと苦情が来ています。');
-      //   }
-      // }
-
-      //重複プログラムの削除
-      // if (currentTurn === 2 || currentTurn === 5) {
-      //   if (NAMESPACE.lastDrinkWaterDistributionAmount < 3) {
-      //     messages.push('生活用水の量が少ないと苦情が来ています。');
-      //   }
-      // }
 
       $('#currentTurn').text((currentTurn+1).toString());
       if (messages.length >= 1) {
@@ -291,7 +272,8 @@ $(function(){
       labels: ['ターン0','ターン1', 'ターン2', 'ターン3', 'ターン4', 'ターン5', 'ターン6'],
       datasets: [{
         label: '水量',
-        data: [turn0_drink_water, turn1_drink_water, turn2_drink_water, turn3_drink_water, turn4_drink_water, turn5_drink_water, turn6_drink_water],
+        // data: [turn0_drink_water, turn1_drink_water, turn2_drink_water, turn3_drink_water, turn4_drink_water, turn5_drink_water, turn6_drink_water],
+        data: NAMESPACE.drinkWaterList,
         backgroundColor: "rgba(153,255,51,0.2)"
       }]
       },
@@ -413,17 +395,4 @@ datasets: [{
 }
 });
 
-  // 開発用
-  $('#inputDevNumBtn').on('click', function () {
-    $women_agent_num = $('#women_agent_num').val('50');
-    $men_agent_num = $('#men_agent_num').val('50');
-    $women_toilet_num = $('#women_toilet_num').val('0');
-    $men_toilet_num = $('#men_toilet_num').val('0');
-    $temporary_toilet_num = $('#temporary_toilet_num').val('0');
-    $excreta_amount = $('#excreta_amount').val('0');
-    $toilet_goods_num = $('#toilet_goods_num').val('30');
-    $toilet_water_amount = $('#toilet_water_amount').val('30');
-    $drink_water_amount = $('#drink_water_amount').val('3');
-    $total_drink_water_amount = $('#total_drink_water_amount').val('600');
-  });
 });

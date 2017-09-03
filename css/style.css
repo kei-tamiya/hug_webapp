@@ -6,6 +6,12 @@
   font-size: 20px;
 }
 
+.input_drink_water_amount{
+/*padding-top: 10px;*/
+padding: 30px 30px 30px 30px;
+  background-color: red;
+}
+
 .graph_header{
   margin-bottom: 30px;
 }
