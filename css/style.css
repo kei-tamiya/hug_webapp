@@ -1,5 +1,42 @@
 @charset "UTF-8";
 
+/*ターンの文字調整*/
+#turnText{
+  text-align: left;
+  font-size: 20px;
+}
+
+.form-size{
+  width: 200px;
+  margin-left:10%;
+  margin-right:10%;
+}
+
+.btn-margin{
+  margin-left:10%;
+  margin-right:10%;
+}
+
+
+.btn-width{
+  width: 200px;
+}
+
+.btn{
+  margin-left: auto;
+}
+
+.input_drink_water_amount{
+  margin-left:30%;
+  margin-right:30%;
+  padding: 30px 30px 30px 0px;
+  /*background-color: red;*/
+}
+
+.graph_header{
+  margin-bottom: 30px;
+}
+
 .navbar {
   float: right;
 }
