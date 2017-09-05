@@ -14,7 +14,7 @@
 </head>
 
 <body>
-  <div class='container' style='padding-top: 40px;'>
+  <div class='container' style='padding-top: 20px;'>
     <div class='row'>
       <header>
         <nav>
@@ -25,7 +25,7 @@
         </nav>
       </header>
     </div>
-    <div class='col-sm-6'>
+    <div class='row col-sm-6'>
       <div class='row'>
         <h2 id="turnText" class='text-center'>ターン<span id='currentTurn'>0</h2>
       </div>
@@ -35,15 +35,15 @@
         </div>
       </div>
       <div class='row graphs'>
-        <div class='col-sm-6'>
+        <div class="col-sm-6">
           <div id='graph_total_drink_water_amount'>
-            <canvas id="chart_total_drink_water_amount"></canvas>
+            <canvas id="chart_total_drink_water_amount" height="300"></canvas>
             <p class='graph_header'>飲み水の備蓄量（L）</p>
           </div>
         </div>
-        <div class='col-sm-6'>
-          <div id='graph_total_people_amount'>
-            <canvas id="chart_total_people_amount"></canvas>
+        <div class="col-sm-6">
+          <div id='graph_total_agent_amount'>
+            <canvas id="chart_total_agent_amount" height="300"></canvas>
             <p class='graph_header'>総避難者人数（人）</p>
           </div>
         </div>
@@ -53,67 +53,64 @@
           </div>
         </div> -->
       </div>
+
     </div>
-    <div class='col-sm-6'>
-      <div>
-          <!-- <div class='form form-group'>
-            <h4>トイレが詰まった場合の次のトイレの場所</h4>
-            <label class='radio-inline'><input id="next_toilet_spot" type="radio" name="next_toilet_spot" value="グラウンド" class="form-control" checked="checked">グラウンド</label>
-            <label class='radio-inline'><input id="next_toilet_spot2" type="radio" name="next_toilet_spot" value="側溝" class="form-control">側溝</label>
-        </div> -->
-        <form class="form-inline">
-          <div class='form form-group' style="margin-top: 40px; text-align: right;">
-            <input type="submit" value="数値入力" class='btn btn-primary' id='inputNumBtn' />
-          </div>
-          <div class='form form-group' style="margin-top: 40px; text-align: right;">
-            <input type="submit" value="Submit" class='btn btn-primary' id='submitBtn' />
-          </div>
-        </form>
-        <div class='form form-group input_drink_water_amount'>
-           生活用水の配給量(L/人*日): <input id="drink_water_amount" name="drink_water_amount" value="" class="form-control"></input>
-        </div>
-      </div>
+
+    <div class='col-sm-6' style="padding-left:50px; padding-top:40px;">
+
       <div class='row'>
         <div class='col-sm-6'>
-        <div class='form form-group'>
-    	    女性避難者数: <input id="women_agent_num" name="women_agent_num" value="" class="form-control"></input>
-    	  </div>
-    	  <div class='form form-group'>
-    	男性避難者数: <input id="men_agent_num" name="men_agent_num" value="" class="form-control"></input>
-    	  </div>
-        <div class='form form-group'>
-    	生活用水の備蓄量（L）: <input id="total_drink_water_amount" name="total_drink_water_amount" value="" class="form-control"></input>
-    	  </div>
+          <div class='form form-group'>
+      	    女性避難者数: <input id="women_agent_num" name="women_agent_num" value="" class="form-control form-size"></input>
+      	  </div>
+      	  <div class='form form-group'>
+      	     男性避難者数: <input id="men_agent_num" name="men_agent_num" value="" class="form-control form-size"></input>
+      	  </div>
+          <div class='form form-group'>
+      	     生活用水の備蓄量（L）: <input id="total_drink_water_amount" name="total_drink_water_amount" value="" class="form-control form-size"></input>
+      	  </div>
+        </div>
+
+        <div class='col-sm-6'>
+          <!-- <div class='form form-group'>
+      	     女性トイレ便器数: <input id="women_toilet_num" name="women_toilet_num" value="" class="form-control form-size"></input>
+      	  </div>
+          <div class='form form-group'>
+      	     男性トイレ便器数: <input id="men_toilet_num" name="men_toilet_num" value="" class="form-control form-size"></input>
+          </div> -->
+          <div class='form form-group'>
+      	     仮設トイレ便器数: <input id="temporary_toilet_num" name="temporary_toilet_num" value="" class="form-control form-size"></input>
+          </div>
+          <div class='form form-group'>
+      	     仮設トイレ貯留量: <input id="excreta_amount" name="excreta_amount" value="" class="form-control form-size"></input>
+          </div>
+          <div class='form form-group'>
+            残りのトイレットペーパー数: <input id="toilet_goods_num" name="toilet_goods_num" value="" class="form-control form-size"></input>
+      	  </div>
+          <!-- <div class='form form-group'>
+      	     トイレを流す水の量: <input id="toilet_water_amount" name="toilet_water_amount" value="" class="form-control form-size"></input>
+      	  </div> -->
+        </div>
       </div>
 
-      <div class='col-sm-6'>
-        <!-- <div class='form form-group'>
-    	     女性トイレ便器数: <input id="women_toilet_num" name="women_toilet_num" value="" class="form-control"></input>
-    	  </div>
-        <div class='form form-group'>
-    	     男性トイレ便器数: <input id="men_toilet_num" name="men_toilet_num" value="" class="form-control"></input>
-        </div> -->
-        <div class='form form-group'>
-    	     仮設トイレ便器数: <input id="temporary_toilet_num" name="temporary_toilet_num" value="" class="form-control"></input>
-        </div>
-        <div class='form form-group'>
-    	     仮設トイレ貯留量: <input id="excreta_amount" name="excreta_amount" value="" class="form-control"></input>
-        </div>
-        <div class='form form-group'>
-    	     残りのトイレットペーパー数: <input id="toilet_goods_num" name="toilet_goods_num" value="" class="form-control"></input>
-    	  </div>
-        <div class='form form-group'>
-    	     トイレを流す水の量: <input id="toilet_water_amount" name="toilet_water_amount" value="" class="form-control"></input>
-    	  </div>
+      <div>
+        <form class="form-inline">
+          <div class="btn-margin" style="padding-top:10px;">
+            <div class='form form-group' style="text-align: right;">
+              <input type="submit" value="数値入力" class='btn btn-primary btn-width' id='inputNumBtn' />
+            </div>
+            <div class='form form-group' style=" text-align: right;">
+              <input type="submit" value="Submit" class='btn btn-primary btn-width' id='submitBtn' />
+            </div>
+          </div>
+          <div class='form form-group input_drink_water_amount'>
+             生活用水の配給量(L/人*日): <input id="drink_water_amount" name="drink_water_amount" value="" class="form-control btn-width"></input>
+          </div>
+        </form>
       </div>
-
-    </div>
    </div>
-
-
-
 </div>
-<script type="text/javascript" src="js/main.js"></script>
 
+<script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>

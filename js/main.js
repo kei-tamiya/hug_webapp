@@ -20,6 +20,7 @@ $(function(){
   NAMESPACE.totalDrinkWaterAmountList = [];
   NAMESPACE.dissatisfactionAverage = [0];
   NAMESPACE.drinkWaterList = [];
+  NAMESPACE.agentNumList = [];
 
   $('#submitBtn').on('click', function(e) {
     e.preventDefault();
@@ -52,21 +53,7 @@ $(function(){
     var currentTurn = parseInt($('#currentTurn').text());
 
     var total_women_agent_num = [6,23,37,56,74,88,106];
-      // var turn0_women_agent_num = total_women_agent_num[0];
-      // var turn1_women_agent_num = total_women_agent_num[1];
-      // var turn2_women_agent_num = total_women_agent_num[2];
-      // var turn3_women_agent_num = total_women_agent_num[3];
-      // var turn4_women_agent_num = total_women_agent_num[4];
-      // var turn5_women_agent_num = total_women_agent_num[5];
-      // var turn6_women_agent_num = total_women_agent_num[6];
     var total_men_agent_num = [8,20,36,55,70,86,98];
-      // var turn0_men_agent_num = total_men_agent_num[0];
-      // var turn1_men_agent_num = total_men_agent_num[1];
-      // var turn2_men_agent_num = total_men_agent_num[2];
-      // var turn3_men_agent_num = total_men_agent_num[3];
-      // var turn4_men_agent_num = total_men_agent_num[4];
-      // var turn5_men_agent_num = total_men_agent_num[5];
-      // var turn6_men_agent_num = total_men_agent_num[6];
 
     // if (typeof women_agent_num !== 'number') {
     //   return alert('女性避難者数は数字を入れてください');
@@ -84,7 +71,7 @@ $(function(){
     } else if (currentTurn < 7) {
       messages = NAMESPACE.nextTurnMessages.slice();
       NAMESPACE.nextTurnMessages = [];
-      // var agentNum = women_agent_num + men_agent_num;
+      var agentNum = women_agent_num + men_agent_num;
       // if (Math.random() < 0.4) {
       //   var idx = Math.floor(Math.random() * tmpMessages.length);
       //   if (idx === 0){
@@ -139,6 +126,8 @@ $(function(){
       function update () {
         _calcDrinkWater();
         NAMESPACE.drinkWaterList.push(total_drink_water_amount);
+        NAMESPACE.agentNumList.push(agentNum);
+        // console.log(NAMESPACE.drinkWaterList);
       }
 
       //ターン毎の固定コメント
@@ -207,6 +196,7 @@ $(function(){
       function _calcDrinkWater() {
         messages.push('生活用水の配給を行いました。');
         NAMESPACE.lastDrinkWaterDistributionAmount = drink_water_amount;
+
         if (drink_water_amount > 0) {
           //応急給水量を半日換算量に ~~/2
           var lostWaterAmount = (women_agent_num + men_agent_num)*drink_water_amount/2;
@@ -216,16 +206,18 @@ $(function(){
               NAMESPACE.nextTurnMessages.push("配給担当から次の生活用水の配給が足りないかも知れないとの報告がありました。");
             }
           }
+
           if (remainingDrinkWaterAmount <= 0) {
             remainingDrinkWaterAmount = 0;
             messages.push('生活用水の備蓄量が0になりました。');
           }
+          console.log(remainingDrinkWaterAmount);
           $('#total_drink_water_amount').val(remainingDrinkWaterAmount);
         }
       }
 
       function _calcToilet() {
-        messages.push('仮設トイレの計算を行いました。');
+        messages.push('仮設トイレの糞尿貯留量を更新しました。');
         // NAMESPACE.excretaDistributionAmount = drink_water_amount;
         // if (drink_water_amount > 0) {
         var excretionAmount = 2.15;
@@ -265,134 +257,124 @@ $(function(){
 
       NAMESPACE.totalDrinkWaterAmountList.push(parseInt($('#total_drink_water_amount').val()));
       NAMESPACE.dissatisfactionAverage.push(3);
+
       var ctx = document.getElementById('chart_total_drink_water_amount').getContext('2d');
       var chart_total_drink_water_amount = new Chart(ctx, {
       type: 'line',
       data: {
       labels: ['ターン0','ターン1', 'ターン2', 'ターン3', 'ターン4', 'ターン5', 'ターン6'],
       datasets: [{
-        label: '水量',
-        // data: [turn0_drink_water, turn1_drink_water, turn2_drink_water, turn3_drink_water, turn4_drink_water, turn5_drink_water, turn6_drink_water],
+        label: '備蓄生活用水量',
         data: NAMESPACE.drinkWaterList,
         backgroundColor: "rgba(153,255,51,0.2)"
       }]
       },
       options: {
-              scale: {
+              scales: {
+                yAxes: [{
                   ticks: {
-                    suggestedMin: 50,
-                    suggestedMax: 100,
+                    suggestedMin: 0,
+                    // suggestedMax: 1500,
                   }
+                }]
               }
           }
       });
+
+      var ctx = document.getElementById('chart_total_agent_amount').getContext('2d');
+      var chart_total_agent_amount = new Chart(ctx, {
+      type: 'line',
+      data: {
+      labels: ['ターン0','ターン1', 'ターン2', 'ターン3', 'ターン4', 'ターン5', 'ターン6'],
+      datasets: [{
+        label: '総避難者人数',
+        data: NAMESPACE.agentNumList,
+        backgroundColor: "rgba(255,153,0,0.2)"
+      }]
+    },
+    options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  min: 0,
+                  max: 250,
+                }
+              }]
+            }
+        }
+      });
+
     }
+
   });
 
-$('#inputNumBtn').on('click', function(e) {
-  e.preventDefault();
+  $('#inputNumBtn').on('click', function(e) {
+    e.preventDefault();
 
-  var $women_agent_num = $('#women_agent_num');
-  var $men_agent_num = $('#men_agent_num');
-  var $women_toilet_num = $('#women_toilet_num');
-  var $men_toilet_num = $('#men_toilet_num');
-  var $temporary_toilet_num = $('#temporary_toilet_num');
-  var $excreta_amount = $('#excreta_amount');
-  var $toilet_goods_num = $('#toilet_goods_num');
-  var $toilet_water_amount = $('#toilet_water_amount');
-  var $drink_water_amount = $('#drink_water_amount');
-  var $total_drink_water_amount = $('#total_drink_water_amount');
-  // var $next_toilet_spot = $('#next_toilet_spot');
+    var $women_agent_num = $('#women_agent_num');
+    var $men_agent_num = $('#men_agent_num');
+    var $women_toilet_num = $('#women_toilet_num');
+    var $men_toilet_num = $('#men_toilet_num');
+    var $temporary_toilet_num = $('#temporary_toilet_num');
+    var $excreta_amount = $('#excreta_amount');
+    var $toilet_goods_num = $('#toilet_goods_num');
+    var $toilet_water_amount = $('#toilet_water_amount');
+    var $drink_water_amount = $('#drink_water_amount');
+    var $total_drink_water_amount = $('#total_drink_water_amount');
+    // var $next_toilet_spot = $('#next_toilet_spot');
 
-  // persInt 数値化
-  var women_agent_num = parseInt($women_agent_num.val());
-  var men_agent_num = parseInt($men_agent_num.val());
-  var women_toilet_num = parseInt($women_toilet_num.val());
-  var men_toilet_num = parseInt($men_toilet_num.val());
-  var temporary_toilet_num = parseInt($temporary_toilet_num.val());
-  var excreta_amount = parseInt($excreta_amount.val());
-  var toilet_goods_num = parseInt($toilet_goods_num.val());
-  var toilet_water_amount = parseInt($toilet_water_amount.val());
-  var drink_water_amount = parseInt($drink_water_amount.val());
-  var total_drink_water_amount = parseInt($total_drink_water_amount.val());
-  // var next_toilet_spot = $next_toilet_spot.val();
+    // persInt 数値化
+    var women_agent_num = parseInt($women_agent_num.val());
+    var men_agent_num = parseInt($men_agent_num.val());
+    var women_toilet_num = parseInt($women_toilet_num.val());
+    var men_toilet_num = parseInt($men_toilet_num.val());
+    var temporary_toilet_num = parseInt($temporary_toilet_num.val());
+    var excreta_amount = parseInt($excreta_amount.val());
+    var toilet_goods_num = parseInt($toilet_goods_num.val());
+    var toilet_water_amount = parseInt($toilet_water_amount.val());
+    var drink_water_amount = parseInt($drink_water_amount.val());
+    var total_drink_water_amount = parseInt($total_drink_water_amount.val());
+    // var next_toilet_spot = $next_toilet_spot.val();
 
-  var currentTurn = parseInt($('#currentTurn').text());
+    var currentTurn = parseInt($('#currentTurn').text());
 
-  var total_women_agent_num = [6,23,37,56,74,88,106];
-    // var turn0_women_agent_num = total_women_agent_num[0];
-    // var turn1_women_agent_num = total_women_agent_num[1];
-    // var turn2_women_agent_num = total_women_agent_num[2];
-    // var turn3_women_agent_num = total_women_agent_num[3];
-    // var turn4_women_agent_num = total_women_agent_num[4];
-    // var turn5_women_agent_num = total_women_agent_num[5];
-    // var turn6_women_agent_num = total_women_agent_num[6];
-  var total_men_agent_num = [8,20,36,55,70,86,98];
-    // var turn0_men_agent_num = total_men_agent_num[0];
-    // var turn1_men_agent_num = total_men_agent_num[1];
-    // var turn2_men_agent_num = total_men_agent_num[2];
-    // var turn3_men_agent_num = total_men_agent_num[3];
-    // var turn4_men_agent_num = total_men_agent_num[4];
-    // var turn5_men_agent_num = total_men_agent_num[5];
-    // var turn6_men_agent_num = total_men_agent_num[6];
-  if (currentTurn === 0) {
-    $women_agent_num = $('#women_agent_num').val(total_women_agent_num[0]);
-    $men_agent_num = $('#men_agent_num').val(total_men_agent_num[0]);
-    $women_toilet_num = $('#women_toilet_num').val('0');
-    $men_toilet_num = $('#men_toilet_num').val('0');
-    $temporary_toilet_num = $('#temporary_toilet_num').val('0');
-    $excreta_amount = $('#excreta_amount').val('0');
-    $toilet_goods_num = $('#toilet_goods_num').val('30');
-    $toilet_water_amount = $('#toilet_water_amount').val('30');
-    $drink_water_amount = $('#drink_water_amount').val('3');
-    $total_drink_water_amount = $('#total_drink_water_amount').val('600');
-    var turn0_drink_water = 0;
-    var turn1_drink_water = 0;
-    var turn2_drink_water = 0;
-    var turn3_drink_water = 0;
-    var turn4_drink_water = 0;
-    var turn5_drink_water = 0;
-    var turn6_drink_water = 0;
-  }
-  if (currentTurn === 1) {
-    $women_agent_num = $('#women_agent_num').val(total_women_agent_num[1]);
-    $men_agent_num = $('#men_agent_num').val(total_men_agent_num[1]);
-  }
-  if (currentTurn === 2) {
-    $women_agent_num = $('#women_agent_num').val(total_women_agent_num[2]);
-    $men_agent_num = $('#men_agent_num').val(total_men_agent_num[2]);
-  }
-  if (currentTurn === 3) {
-    $women_agent_num = $('#women_agent_num').val(total_women_agent_num[3]);
-    $men_agent_num = $('#men_agent_num').val(total_men_agent_num[3]);
-  }
-  if (currentTurn === 4) {
-    $women_agent_num = $('#women_agent_num').val(total_women_agent_num[4]);
-    $men_agent_num = $('#men_agent_num').val(total_men_agent_num[4]);
-  }
-  if (currentTurn === 5) {
-    $women_agent_num = $('#women_agent_num').val(total_women_agent_num[5]);
-    $men_agent_num = $('#men_agent_num').val(total_men_agent_num[5]);
-  }
-  if (currentTurn === 6) {
-    $women_agent_num = $('#women_agent_num').val(total_women_agent_num[6]);
-    $men_agent_num = $('#men_agent_num').val(total_men_agent_num[6]);
-  }
-});
+    var total_women_agent_num = [6,23,37,56,74,88,106];
+    var total_men_agent_num = [8,20,36,55,70,86,98];
 
-
-
-var ctx = document.getElementById('chart_total_people_amount').getContext('2d');
-var chart_total_people_amount = new Chart(ctx, {
-type: 'line',
-data: {
-labels: ['ターン0','ターン1', 'ターン2', 'ターン3', 'ターン4', 'ターン5', 'ターン6'],
-datasets: [{
-  label: '人数',
-  data: [14, 43, 73, 111, 144, 174, 204],
-  backgroundColor: "rgba(255,153,0,0.2)"
-}]
-}
-});
-
+    if (currentTurn === 0) {
+      $women_agent_num = $('#women_agent_num').val(total_women_agent_num[0]);
+      $men_agent_num = $('#men_agent_num').val(total_men_agent_num[0]);
+      $women_toilet_num = $('#women_toilet_num').val('0');
+      $men_toilet_num = $('#men_toilet_num').val('0');
+      $temporary_toilet_num = $('#temporary_toilet_num').val('0');
+      $excreta_amount = $('#excreta_amount').val('0');
+      $toilet_goods_num = $('#toilet_goods_num').val('30');
+      $toilet_water_amount = $('#toilet_water_amount').val('30');
+      $total_drink_water_amount = $('#total_drink_water_amount').val('600');
+    }
+    if (currentTurn === 1) {
+      $women_agent_num = $('#women_agent_num').val(total_women_agent_num[1]);
+      $men_agent_num = $('#men_agent_num').val(total_men_agent_num[1]);
+    }
+    if (currentTurn === 2) {
+      $women_agent_num = $('#women_agent_num').val(total_women_agent_num[2]);
+      $men_agent_num = $('#men_agent_num').val(total_men_agent_num[2]);
+    }
+    if (currentTurn === 3) {
+      $women_agent_num = $('#women_agent_num').val(total_women_agent_num[3]);
+      $men_agent_num = $('#men_agent_num').val(total_men_agent_num[3]);
+    }
+    if (currentTurn === 4) {
+      $women_agent_num = $('#women_agent_num').val(total_women_agent_num[4]);
+      $men_agent_num = $('#men_agent_num').val(total_men_agent_num[4]);
+    }
+    if (currentTurn === 5) {
+      $women_agent_num = $('#women_agent_num').val(total_women_agent_num[5]);
+      $men_agent_num = $('#men_agent_num').val(total_men_agent_num[5]);
+    }
+    if (currentTurn === 6) {
+      $women_agent_num = $('#women_agent_num').val(total_women_agent_num[6]);
+      $men_agent_num = $('#men_agent_num').val(total_men_agent_num[6]);
+    }
+  });
 });
